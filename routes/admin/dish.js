@@ -42,12 +42,14 @@ router.get('/', (req, res)=>{
 *POST /admin/dish/image
 *请求参数：
 *接收客户端上传的菜品图片，保存在服务器上，返回该图片在服务器上的随机文件名
+*返回数据：
+*   {code:200, msg:"upload succ", fileName:'13512873612-2342.jpg'}
 */
 //引入multer中间件
 const multer = require('multer');
-const fs = require('fs');//文件转移
+const fs = require('fs');
 var upload = multer({
-  dest: 'tmp/'    //指定客户端上传的文件临时存储路径
+  dest: 'tmp/' //指定客户端上传的文件临时存储路径
 })
 //定义路由，使用文件上传中间件
 router.post('/image', upload.single('dishImg'), (req, res)=>{
@@ -74,35 +76,33 @@ function randFileName(suffix){
 
 /*
 *POST /admin/dish
+*请求参数：{title:'xx',imgUrl:'..jpg',price:xx,detail:'xx', categoryId:xx}
 *添加一个新的菜品
-*请求参数：{title:'xx',imgUrl:'...jpg',price:xx,detail:'xx',category:xx}
-添加一个新菜品
-输出信息：{code:200,msg:'dish added succ',dish/id:46}
+*输出消息：
+*   {code:200, msg:'dish added succ', dishId:46}
 */
-router.post('/',(req,res)=>{
-    pool.query('INSERT INTO xfn_dish SET ?',req.body,(err,result)=>{
-        if(err)throw err;
-        res.send({code:200,msg:'dish added succ',dishId:result.insertId});//将INSERT 语句产生的自增编号输出给客户端
-    });
-});
-/**
- * DELETE /admin/dish:did
- * 根据指定的菜品编号删除该菜品
- * 输出数据：
- *  {code：200，msg:'dish deleted succ'}
- *  {code：400，msg:'dish not exists'}
- */
-router.delete('/',(req,res)=>{
-    
-});
- /**
-  * PUT /admin/dish
-  * 请求的参数：{did:xx,title:'xx',imgUrl:'...jpg',price:xx,detail:'xx',categoryId:xx}
-  * 根据指定菜品编号修改菜品
-  * 输出数据：
-  *    {code:200,msg:'dish updated succ'}
-  *    {code:400,msg:'dish not exists'}
-  */
- router.put('/',(req,res)=>{
-    
-});
+router.post('/', (req, res)=>{
+  pool.query('INSERT INTO xfn_dish SET ?', req.body, (err, result)=>{
+    if(err)throw err;
+    res.send({code:200, msg:'dish added succ', dishId:result.insertId}) //将INSERT语句产生的自增编号输出给客户端
+  })
+})
+
+/*
+*DELETE /admin/dish/:did
+*根据指定的菜品编号删除该菜品
+*输出数据：
+*   {code:200, msg:'dish deleted succ'}
+*   {code:400, msg:'dish not exists'}
+*/
+
+
+
+/*
+*PUT /admin/dish
+*请求参数：{did:xx, title:'xx',imgUrl:'..jpg',price:xx,detail:'xx', categoryId:xx}
+*根据指定的菜品编号修改菜品
+*输出数据：
+*   {code:200, msg:'dish updated succ'}
+*   {code:400, msg:'dish not exists'}
+*/
